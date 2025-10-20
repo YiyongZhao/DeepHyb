@@ -1,71 +1,69 @@
 <div align="center" style="display: flex; align-items: center; justify-content: center;">
-  <img src="image/logo.jpg" width="90" height="90" alt="HybridTracer-GNN Logo" style="margin-right: 10px;">
-  <h2 style="margin: 0;">HybridTracer-GNN</h2>
+  <img src="image/deephyb_logo.jpg" width="90" height="90" alt="DeepHyb Logo" style="margin-right: 10px;">
+  <h2 style="margin: 0;">DeepHyb</h2>
 </div>
 
-**HybridTracer-CNN** enables inference of hybrid speciation with a deep neural network.
+**DeepHyb** enables inference of historical hybrid speciation events using a Convolutional Neural Network (CNN) with embedded comprehensive multiple sequence alignment (MSA) features.
 
-- **PyPI**: [Hybrid_Tracer-GNN] no link available
-- **GitHub**: [Hybrid_Tracer-GNN](https://github.com/YiyongZhao/Hybrid_Tracer-GNN)
+- **PyPI**: [DeepHyb] no link available
+- **GitHub**: [DeepHyb](https://github.com/YiyongZhao/DeepHyb/tree/main/DeepHyb_CNN)
 - **License**: MIT License
-- **Release Date**: July 2024
+- **Release Date**: October 2025
 - **Contacts**: 
-  - Xinzheng Du: [duxz@xiaohuafund.com](mailto:duxz@xiaohuafund.com)
-  - Yiyong Zhao: [yiyongzhao1991@gmail.com](mailto:yiyongzhao1991@gmail.com)                                                                    
+  - Xinzheng Du: [duxz@ustc.edu.cn](mailto:duxz@ustc.edu.cn) (Division of Life Sciences and Medicine, University of Science and Technology of China)
+  - Yiyong Zhao (Corresponding Author): [yiyong.zhao@yale.edu](mailto:yiyong.zhao@yale.edu) (Department of Biomedical Informatics & Data Science, Yale University)                                                                    
 
 
 ![Version](https://img.shields.io/badge/Version-1.0.0-blue)
-[![Documentation Status](http://readthedocs.org/projects/hybridization-detection/badge/?version=latest)](http://hybridization-detection.readthedocs.io)
-[![HybridTracer-GNN Issues](https://img.shields.io/badge/HybridTracer--CNN--Issues-blue)](https://github.com/YiyongZhao/HybridTracer-GNN/issues)
-![Build Status](https://travis-ci.org/YiyongZhao/HybridTracer-GNN.svg?branch=master)
-[![PyPI](https://img.shields.io/pypi/v/HybridTracer-GNN.svg)](https://pypi.python.org/pypi/HybridTracer-GNN)
+[![Documentation Status](http://readthedocs.org/projects/deephyb/badge/?version=latest)](http://deephyb.readthedocs.io)
+[![DeepHyb Issues](https://img.shields.io/badge/DeepHyb--Issues-blue)](https://github.com/YiyongZhao/DeepHyb/issues)
+![Build Status](https://travis-ci.org/YiyongZhao/DeepHyb.svg?branch=main)
+[![PyPI](https://img.shields.io/pypi/v/DeepHyb.svg)](https://pypi.python.org/pypi/DeepHyb)
 
 ### Introduction
-HybridTracer-GNN enables the inference of hybrid speciation and admixture using a fast graph neural network. Our work is implemented in PyTorch, utilizing the [SimGNN](https://github.com/benedekrozemberczki/SimGNN) framework for multiple sequence alignment embedding. However, the reference framework is also accessible in a TensorFlow implementation [here](https://github.com/yunshengb/SimGNN), and another implementation is available [here](https://github.com/NightlyJourney/SimGNN) for your information.
+DeepHyb is the first deep learning tool that directly analyzes raw DNA multiple sequence alignments (MSAs) to infer historical hybridization events. It addresses the limitation of traditional tools (e.g., HyDe) that can detect hybridization but fail to classify non-hybrid evolutionary scenarios. 
+
+Key capabilities of DeepHyb:
+1. Accurately detect hybridization events and distinguish between hybrid and non-hybrid lineages.
+2. Identify parental lineages and hybrid offspring from MSA data.
+3. Leverage four embedded MSA features (15_summary_site_patterns, 256_one_base_site_patterns, 75_summary_kmer_site_patterns, 256_seq_kmer_patterns) for robust inference.
+4. Provide interpretability via SHAP (SHapley Additive exPlanations) analysis, validating classic introgression signals (ABBA-BABA patterns) and uncovering a novel predictive pattern (ABAA).
+
+DeepHyb was validated on genomic data from 92 *Heliconius* butterflies (a model system for evolutionary biology), achieving over 93% accuracy in classifying species relationships (hybrid + non-hybrid cases).
 <p align="center">
-  <img width="800" src="image/hybgnn.jpg">
+  <img width="800" src="image/deephyb_architecture.jpg" alt="DeepHyb CNN Architecture">
 </p>
+*Figure: DeepHyb’s CNN architecture, processing 4 MSA-derived features via distinct branches to predict hybridization status (Target1) and parental/hybrid identities (Target2).*
 
 
-### Clone and install environment:
-
+### Clone and Install Environment
 ```bash
-#A convenient one-click installation by using conda (https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html) with the following commands:
-git clone https://github.com/YiyongZhao/Hybrid_Tracer-GNN.git
-cd Hybrid_Tracer-GNN
-conda env create -f environment.yml # there is no environment.yml file included
-conda activate Hybrid_Tracer-GNN
+# One-click installation via conda (https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html)
+git clone https://github.com/YiyongZhao/DeepHyb.git
+cd DeepHyb/DeepHyb_CNN
+conda env create -f environment.yml # environment.yml not included; use pip for dependencies below
+conda activate DeepHyb
 
-#Alternatively, a convenient one-click installation by using pip (the package installer for Python) with the following commands:
-chmod +x install_packages.sh
-bash install_package.sh
-
-#Required dependencies:
-Python 3.0+
-  Python modules:
-  networkx          2.4
-  tqdm              4.28.1
-  numpy             1.15.4
-  pandas            0.23.4
-  texttable         1.5.0
-  scipy             1.1.0
-  argparse          1.1.0
-  torch             1.1.0
-  torch-scatter     1.4.0
-  torch-sparse      0.4.3
-  torch-cluster     1.4.5
-  torch-geometric   1.3.2
-  torchvision       0.3.0
-  scikit-learn      0.20.0
+# Alternative installation via pip
+# Required dependencies (Python 3.7+):
+pip install torch scikit-learn numpy pandas tqdm shap argparse tensorflow
+# Install HyDe separately for preliminary hybridization signal comparison:
+pip install hyde-python
 ```
-### Install from PyPI with pip:
 
+### Install from PyPI with pip
 ```bash
-pip install Hybrid_Tracer-GNN # cannot install from PyPI
+pip install DeepHyb # Cannot install from PyPI currently
 ```
+
 ## Usage 
-### Datasets for GNN trainning
-[JSON](https://www.json.org/json-en.html) (JavaScript Object Notation) is a lightweight data-interchange format that is both human-readable and machine-parsable, facilitating straightforward data exchange. Each MSA (Multiple Sequence Alignment) file is stored in JSON format, represented as a collection of graphs. In these graphs, each node ID and node label are indexed from 0 to 14, corresponding to the 15 patterns specified in the table below:
+### Datasets for CNN Training
+[JSON](https://www.json.org/json-en.html) is used as the data interchange format, storing MSA-derived features and labels. Each JSON file contains three key components:
+1. **Feature data**: 4 feature sets from MSAs (15_summary_site_patterns, 256_one_base_site_patterns, 75_summary_kmer_site_patterns, 256_seq_kmer_patterns).
+2. **Hybridization signals**: Preliminary results from HyDe (e.g., z-scores, p-values).
+3. **Taxonomic labels**: Annotations for outgroups, parental lineages, and hybrid lineages (defining model targets).
+
+The 15_summary_site_patterns (Feature 1) correspond to the following patterns (used for node labeling in feature processing):
 | **Pattern** | **Node ID** |
 |:-------------| :------------:|
 | AAAA | 0 |
@@ -84,164 +82,155 @@ pip install Hybrid_Tracer-GNN # cannot install from PyPI
 | ABCC | 13 |
 | ABCD | 14 |
 
-
-Every JSON file has the following key-value structure:
-
+Example JSON structure:
 ```javascript
-{"graph_1": [[0, 1], [1, 2], [2, 3], [3, 4]],
- "labels_1": [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
- "ged": 2}
+{
+  "15_summary_site_patterns": [12, 8, 5, ..., 3], // Length: 15
+  "256_one_base_site_patterns": [5, 18, 220, ..., 101], // Length: 256
+  "75_summary_kmer_site_patterns": [[3, 7, ..., 2], [5, 9, ..., 4], ..., [1, 6, ..., 0]], // Length: 5 (k=2-6) × 15
+  "256_seq_kmer_patterns": [[2, 5, ..., 1], [7, 3, ..., 4], ..., [9, 1, ..., 6]], // Length: 4 (individuals) × 64
+  "target1": 2, // 2 = Hybrid, 8 = Non-hybrid
+  "target2": 15 // 64 categories (outgroup + parental/hybrid combinations)
+}
 ```
 
-The **graph_1** keys have edge list values which descibe the connectivity structure. Similarly, the **labels_1** keys have labels for each node which are stored as list - positions in the list correspond to node identifiers. The **ged** key has an integer value which is hybrid attribute value, in our example 2 = Hybird, 4 = Admixture, 6 = Admix with gene flow, 8 = No hybird.
+### Example Input Format: Multiple Sequence Alignment (MSA)
+DeepHyb requires MSA files in **PHYLIP format (no header)**. The number of sequences must be >4, and all sequences must have the same length.
 
-### Example Input Format of Multiple Sequence Alignment （MSA）
+#### Key MSA Requirements:
+1. Place PHYLIP files (extension: .phy) in the "phy" folder.
+2. Concatenate orthologous coding genes into a supermatrix (ideal length: >50,000 bp for sufficient inference power, per coalescent model estimates).
+3. Convert VCF files to PHYLIP format (post-reference alignment) using tools like [GATK](https://gatk.broadinstitute.org/hc/en-us) for individual-level genomic data.
 
-The [PHYLIP](https://www.phylo.org/index.php/help/phylip) (Phylogeny Inference Package) format is a widely used text format for storing multiple sequence alignments in bioinformatics.
-
-To get started quickly, follow these steps:
-
-1. **Place Your MSA**:
-
-   Place your MSA file with the ".phy" extension into the "phy" folder.
-
-2. **Format Your MSA**:
-
-   Ensure your ".phy" file is formatted as shown in the following example:
-
-   - For each species, you can concatenate many orthologous coding genes into a supermatrix with the PHYLIP format.
-   - Additionally, you can convert a VCF file to a supermatrix in PHYLIP format from genomic DNA data at the individual level after reference genome alignment using aligners such as [GATK](https://gatk.broadinstitute.org/hc/en-us).
-
-3. **Supermatrix Length**:
-   Ideally, the length of an input supermatrix alignment should be longer than 50,000 base pairs to provide sufficient power for significant inference, as estimated by previous phylogenetic invariants arising under the coalescent model with hybridization, using [HyDe](https://github.com/pblischak/HyDe).
-
-### Example Supermatrix with PHYLIP File Format
+#### Example PHYLIP File (species-level):
 ```
------------example_MSA_with_sps_level.phy-----------------------------------------------------------------------------------------
-sps1	GAAGTTAGTA-TGA-ACTGATTAGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
-sps2	GAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
-sps3	GAC-TTAGT-CTGATACTGATGAGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
-sps4	GAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
-...
-...
-spsN	GAACTGAGTACTGATACTGATTAGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
-```
-```
------------example_MSA_with_pop_level.phy---------------------------------------------------------------------------------------------
-sps1_pop1	GAAGTTAGTA-TGA-ACTGATTAGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
-sps1_pop2	GAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTTCCTCGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
-sps3_pop1	GAC-TTAGT-CTGATACTGATGAGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTTCCTCGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
-sps4_pop1	GAC-TTAGTACTGATAC-ATTAGGTTTCCTCGAC-TTAGTACTGATAC-ATTAGGTTTCCTCGAC-TTAGTACAGATAC-ATTAGGTTTCCTCGAC-TTAGTACTGATAC-ATTAGGTTTCCTC
-sps4_pop2	GAC-TTAGTACAGATAC-ATTAGGTTTCCTCGAC-TTAGTACTGATAC-ATTAGGTTTCCTCGAC-TTAGTACAGATAC-ATTAGGTTTCCTCGAC-TTAGTACTGATAC-ATTAGGTTTCCTC
-sps4_pop3	GAC-TTAGTACTGGTAC-ATTAGGTTTCCTCGAC-TTAGT-CTGATACTGATGAGGTTCCTTGAC-TTAGTACTGAC-TTAGTACAGATAC-ATTAGGTTTCCTCGAC-TTAGTACTGATAC-A
-...
-...
-spsN_pop1	GAACTGAGTACTGATACTGATTAGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTTCCTCGAC-TTAGTACAGATAC-ATTAGGTTTCCTCGAC-TTAGTACTGATAC-ATTAGGTTTCCTC
-
-```
-Note that the length of sequence names can vary, but each line must be arranged in the format: "sequence name" + "\t" + "sequence". Additionally, each sequence must have the same length.
-
-How to concatenated orthologous multiple sequnce alignet (each sample with single copy gene) into a supermatirx with phylip format, we provdie a python scirpt:  [``concat_msa.py``](https://github.com/YiyongZhao/Hybrid_Tracer-GNN/blob/main/concat_msa.py)
-
-Place your fasta multiple sequence alignment files with extensions .fas, .fa, or .fasta into a directory, e.g., MSA_dir. Run the script as follows:
-This script processes `.fas`, `.fasta`, or `.fa` files in a specified directory and concatenates them into a supermatrix in PHYLIP format. The output file is saved in the current working directory.
-
-```
-python concat_msa.py MSA_dir
-```
-The script will generate a concatenated supermatrix in PHYLIP format and save it in the current directory. The output filename will follow the format: <number_of_samples>samples_<number_of_genes>genes_<sequence_length>bp_concatenate.phy.
-
-
-### Examples
-<p align="justify">
-To start it quickly, after input your ".phy" files into "phy" folder, run "example.py".
-
-```
-python example.py
+-----------heliconius_species.phy-----------------------------------------------------------------------------------------
+outgroup	GAAGTTAGTA-TGA-ACTGATTAGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+sp1_ind1	GAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+sp1_ind2	GAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+sp2_ind1	GAC-TTAGT-CTGATACTGATGAGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+sp2_ind2	GAC-TTAGT-CTGATACTGATGAGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+hybrid_ind1	GAAGTTAGTA-TGA-ACTGATGAGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+hybrid_ind2	GAAGTTAGTA-TGA-ACTGATGAGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
 ```
 
-We **strongly recommend** placing the outgroup as the first line in the ".phy" file if you can identify which one is the outgroup, then run "outgroup.py" instead of running "example.py".
-
+#### Example PHYLIP File (population-level):
 ```
-python outgroup.py
-```
-
-If you want train your own model:
-
-The following commands learn a neural network and score on the test set. Training a GNN model on the default dataset (no "GNN_run.jpg").</p>
-
-```
-python src4types/main.py
-```
-<p align="center">
-<img style="float: center;" src="GNN_run.jpg">
-</p>
-
-Training a GNN model for a 100 epochs with a batch size of 512.
-```
-python src4types/main.py --epochs 100 --batch-size 512
-```
-Training a GNN with histogram features.
-```
-python src4types/main.py --histogram
-```
-Training a GNN with histogram features and a large bin number.
-```
-python src4types/main.py --histogram --bins 32
-```
-Increasing the learning rate and the dropout.
-```
-python src4types/main.py --learning-rate 0.01 --dropout 0.9
-```
-You can save the trained model by adding the `--save-path` parameter.
-```
-python src4types/main.py --save-path /path/to/model-name
-```
-Then you can load a pretrained model using the `--load-path` parameter; **note that the model will be used as-is, no training will be performed**.
-```
-python src4types/main.py --load-path /path/to/model-name
+-----------heliconius_population.phy---------------------------------------------------------------------------------------------
+outgroup_pop1	GAAGTTAGTA-TGA-ACTGATTAGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+sp1_pop1	GAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+sp1_pop2	GAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+sp2_pop1	GAC-TTAGT-CTGATACTGATGAGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+sp2_pop2	GAC-TTAGT-CTGATACTGATGAGGTTCCTTGAC-TTAGTACTGA-ACTGA--AGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+hybrid_pop1	GAAGTTAGTA-TGA-ACTGATGAGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
+hybrid_pop2	GAAGTTAGTA-TGA-ACTGATGAGGTTCCTTGAC-TTAGTACTGATAC-ATTAGGTTCCTCTGAC-TTAGTACTGATAC-ATTAGGTTCCTCGAC-TTAGTACTGA-ACTGA--AGGTTCCTTT
 ```
 
-### Options
-<p align="justify">
-Training a GNN model is handled by the `src4types/main.py` script which provides the following command line arguments.</p>
+### MSA Feature Extraction (msa_sitepattern_counter.py)
+This script processes PHYLIP files to generate JSON feature files and runs HyDe for preliminary hybridization signals.
 
-#### Input and output options
-```
-  --training-graphs   STR    Training graphs folder.      Default is `dataset/train/`.
-  --testing-graphs    STR    Testing graphs folder.       Default is `dataset/test/`.
-```
-Please **note that the trainset and testset folder must end with "/" !**
-#### Model options
-```
-  --filters-1             INT         Number of filter in 1st GCN layer.       Default is 128.
-  --filters-2             INT         Number of filter in 2nd GCN layer.       Default is 64. 
-  --filters-3             INT         Number of filter in 3rd GCN layer.       Default is 32.
-  --bottle-neck-neurons   INT         Bottle neck layer neurons.               Default is 16.
-  --bins                  INT         Number of histogram bins.                Default is 16.
-  --batch-size            INT         Number of pairs processed per batch.     Default is 128. 
-  --epochs                INT         Number of GNN training epochs.           Default is 5.
-  --dropout               FLOAT       Dropout rate.                            Default is 0.5.
-  --learning-rate         FLOAT       Learning rate.                           Default is 0.001.
-  --weight-decay          FLOAT       Weight decay.                            Default is 10^-5.
-  --histogram             BOOL        Include histogram features.              Default is False.
+```bash
+# Basic usage: Process PHYLIP files in "phy" folder, k-mer range 2-6, outgroup named "outgroup"
+python msa_sitepattern_counter.py \
+  --phy_folder ./phy \
+  --kmer_range 2 3 4 5 6 \
+  --out_name outgroup \
+  --num_cores 4 \
+  --output_folder ./output_jsons
 ```
 
-### Output
-<p align="justify">
-The output files default to being saved in the "output_files" folder, which records the probabilities of hybridization, admixture, admixture with gene flow, and no hybridization events. In cases where hybridization occurs, an additional "*_gamma.log" files are generated, containing records of gamma values.
+#### Key Parameters for msa_sitepattern_counter.py:
+| Parameter         | Type       | Description                                                                 | Default       |
+|:------------------|:-----------|:-----------------------------------------------------------------------------|:--------------|
+| --phy_folder      | STR        | Folder containing PHYLIP (.phy) files                                        | ./phy         |
+| --kmer_range      | LIST[INT]  | Range of k-mer lengths for 75_summary_kmer_site_patterns (k=2-6)            | 2 3 4 5 6     |
+| --out_name        | STR        | Name of the outgroup (must match sequence names in .phy)                     | outgroup      |
+| --num_cores       | INT        | Number of CPU cores for parallel processing                                  | Max available |
+| --output_folder   | STR        | Folder to save JSON feature files and HyDe results                           | ./output_jsons|
+
+### CNN Training & Inference (DeepHybCNN.py)
+This script trains the CNN model on JSON features, evaluates performance, and saves the trained model.
+
+#### Quick Start:
+```bash
+# Train model: 10,000 epochs, batch size 512, early stopping at loss < 0.01
+python DeepHybCNN.py \
+  --train_folder ./output_jsons/train \
+  --test_folder ./output_jsons/test \
+  --epochs 10000 \
+  --batch_size 512 \
+  --lr 0.0003 \
+  --maxloss 0.01 \
+  --model_save_path ./models/deephyb_cnn.pth \
+  --loss_save_path ./logs/deephyb_loss.json
+```
+
+#### Train with Pretrained Model:
+```bash
+# Load pretrained model (no training, only inference)
+python DeepHybCNN.py \
+  --test_folder ./output_jsons/test \
+  --load_path ./models/deephyb_cnn.pth
+```
+
+#### Key Parameters for DeepHybCNN.py:
+| Parameter         | Type       | Description                                                                 | Default               |
+|:------------------|:-----------|:-----------------------------------------------------------------------------|:----------------------|
+| --train_folder    | STR        | Folder containing training JSON files                                        | ./output_jsons/train  |
+| --test_folder     | STR        | Folder containing testing JSON files                                         | ./output_jsons/test   |
+| --epochs          | INT        | Maximum training epochs                                                      | 10000                 |
+| --batch_size      | INT        | Batch size for training/inference                                            | 512                   |
+| --lr              | FLOAT      | Learning rate (Adam optimizer)                                               | 0.0003                |
+| --maxloss         | FLOAT      | Early stopping threshold (stop if avg loss < maxloss)                        | 0.01                  |
+| --model_save_path | STR        | Path to save trained model (.pth)                                            | ./models/deephyb_cnn.pth |
+| --loss_save_path  | STR        | Path to save training loss history (JSON)                                    | ./logs/deephyb_loss.json |
+| --load_path       | STR        | Path to load pretrained model (skips training)                               | None                  |
+
+### SHAP Interpretability Analysis
+Run SHAP to quantify feature importance (focus on 256_one_base_site_patterns, the top contributor to predictions):
+```bash
+# Example: Analyze model predictions with SHAP
+python shap_analysis.py \
+  --model_path ./models/deephyb_cnn.pth \
+  --test_folder ./output_jsons/test \
+  --output_plot ./plots/shap_feature_importance.png
+```
+
+#### Key SHAP Findings:
+- Top predictive patterns: ABBA (classic introgression), BABA (classic introgression), ABAA (novel pattern).
+- Highest pattern importance near wing-pattern loci (e.g., *HmB* in *Heliconius*), confirming adaptive introgression.
+
+
+## Output
+All outputs are saved in the "output_files" folder by default:
+1. **Model outputs**: Trained CNN model (.pth), loss history (JSON).
+2. **Prediction results**: 
+   - Target1 (Hybrid/Non-hybrid): Accuracy, precision, recall, F1-score, confusion matrix.
+   - Target2 (Parental/hybrid identity): Classification accuracy, confusion matrix.
+3. **SHAP results**: Feature importance plots, SHAP value matrices.
+4. **HyDe results**: Raw/filtered hybridization signals (from msa_sitepattern_counter.py).
+
 
 ## Bug Reports
-You can report bugs or request features through our [GitHub Issues page](https://github.com/YiyongZhao/Hybrid_Tracer-GNN/issues). If you have any questions, suggestions, or issues, please do not hesitate to contact us.
+Report bugs, request features, or ask questions via the [GitHub Issues page](https://github.com/YiyongZhao/DeepHyb/issues). Include:
+- Your input PHYLIP file (or sample).
+- Command run and error logs (if any).
+
 
 ## Contributing
-If you're interested in contributing code or reporting bugs, we welcome your ideas and contributions to improve HybridTracer-GNN! Please check out [Contribution Guidelines](https://docs.github.com/en/issues).
+We welcome contributions to improve DeepHyb! Follow these steps:
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/your-feature`.
+3. Commit changes: `git commit -m "Add [feature/bug fix]: description"`.
+4. Push to the branch: `git push origin feature/your-feature`.
+5. Open a Pull Request.
+
 
 ## Version History
-Check the [Changelog](https://github.com/YiyongZhao/Hybrid_Tracer-GNN/commits/HybridTracer-GNN_v1.0.0) for details on different versions and updates.
+| Version | Date       | Changes                                                                 |
+|:--------|:-----------|:-------------------------------------------------------------------------|
+| 1.0.0   | October 2025 | Initial release: MSA feature extraction, CNN training, SHAP analysis.    |
+
 
 ## License
-HybridTracer-GNN  is licensed under the [MIT LICENSE](LICENSE).
-
-
-
+DeepHyb is licensed under the [MIT LICENSE](LICENSE).
